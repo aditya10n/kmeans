@@ -1,6 +1,7 @@
 package Controller;
 
 import javax.swing.JFileChooser;
+import javax.swing.table.DefaultTableModel;
 
 import Class.ExcelConn;
 
@@ -8,6 +9,7 @@ public class SetData {
 	private String alamat;
 	private Frame.SetData main;
 	private ExcelConn excel;
+	private Object[][] data;
 	
 	public String openFile(){
 		JFileChooser fileChooser = new JFileChooser();
@@ -29,15 +31,28 @@ public class SetData {
 		return sheet;
 	}
 	
-	public String[] getData(String sheet, String from, String to){
-		String[] data=null;
+	public Object[][] getData(String sheet, String from, String to){
+		data=null;
 		
-		excel = new ExcelConn(alamat,sheet,from,to);
+		excel = new ExcelConn(alamat,sheet);
 		data = excel.data;
 		return data;
 	}
 	
 	public void setAlamat(String alamat){
 		this.alamat=alamat;
+	}
+	
+	public DefaultTableModel table(){
+		DefaultTableModel dm = new DefaultTableModel(){
+			private static final long serialVersionUID = 1L;
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+			
+		};
+		dm.setDataVector(data, null);
+		return dm;
 	}
 }

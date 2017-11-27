@@ -29,6 +29,7 @@ import javax.swing.JSpinner;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JCheckBox;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 
 
 public class SetData extends JFrame {
@@ -40,6 +41,8 @@ public class SetData extends JFrame {
 	private JTextField to;
 	private JComboBox comboBox;
 	String[] sheet;
+	private JTable table;
+	final JScrollPane scrollPane;
 
 	/**
 	 * Launch the application.
@@ -91,7 +94,13 @@ public class SetData extends JFrame {
 				if(!alamat.getText().equals("")){
 					main.setAlamat(alamat.getText());
 					sheet= main.getSheet();
+					
+					for(int i=comboBox.getItemCount()-1;i>=0;i--){
+						comboBox.removeItemAt(i);
+					}
+					
 					for(int i=0;i<sheet.length;i++){
+						
 						comboBox.addItem(sheet[i]);
 					}
 					
@@ -154,8 +163,11 @@ public class SetData extends JFrame {
 		);
 		panel_6.setLayout(new BorderLayout(0, 0));
 		
-		JScrollPane scrollPane = new JScrollPane();
+		scrollPane = new JScrollPane();
 		panel_6.add(scrollPane, BorderLayout.CENTER);
+		
+		table = new JTable();
+		scrollPane.setViewportView(table);
 		
 		JPanel panel_3 = new JPanel();
 		panel_3.setBorder(new TitledBorder(null, "Sheet", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -168,6 +180,9 @@ public class SetData extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				main.getData(comboBox.getSelectedItem().toString(),
 						from.toString(), to.toString());
+				table.setModel(main.table());
+				scrollPane.setViewportView(table);
+				
 			}
 		});
 		GroupLayout gl_panel_1 = new GroupLayout(panel_1);

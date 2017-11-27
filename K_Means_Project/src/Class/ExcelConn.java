@@ -7,9 +7,12 @@ import java.io.IOException;
 import java.util.Iterator;
 
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -17,11 +20,12 @@ import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 
+
 public class ExcelConn {
 	
 	public String[] sheet;
-	public String[] data;
-	
+	public Object[][] data;
+	public int maxrow, maxcol;
 	
 	
 	public ExcelConn(String alamat){
@@ -53,25 +57,93 @@ public class ExcelConn {
          
 	}
 	
-	public ExcelConn(String alamat, String sheet, String from, String to){
-		
-        
+	public void maxR(int row){
+		if(row>this.maxrow){
+			this.maxrow=row;
+		}
+	}
+	public void maxC(int col){
+		if(col>this.maxcol){
+			this.maxcol=col;
+		}
+	}
+	
+	public void setRC(String alamat, String sheet){
+		int row,col;
 		try {
-			FileInputStream excelFile = new FileInputStream(new File(alamat));
+			
+	        FileInputStream excelFile = new FileInputStream(new File(alamat));
 	        Workbook workbook = new XSSFWorkbook(excelFile);
 	        Sheet datatypeSheet = workbook.getSheet(sheet);
-			
-	        Iterator<Row> rowIterator = datatypeSheet.iterator();
-	        while(rowIterator.hasNext())
-            {
-	        	
-            }
-			
+	        Iterator<Row> iterator = datatypeSheet.iterator();
 	        
-			System.out.println();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
+	        row = 0;
+	        while (iterator.hasNext()) {
+	        	
+	        	col = 0;
+	            Row currentRow = iterator.next();  //System.out.println(row +","+ col);
+	            currentRow.getLastCellNum();
+	            Iterator<Cell> cellIterator = currentRow.iterator();
+	            
+	            while (cellIterator.hasNext()) {
+	                Cell currentCell = cellIterator.next(); 
+	               
+	                if (currentCell.getCellTypeEnum() == CellType.STRING) {
+	                	//System.out.println(row +","+ col);
+	                } else if (currentCell.getCellTypeEnum() == CellType.NUMERIC) {
+	                	//System.out.println(row +","+ col);
+	                }
+	                maxC(++col);
+	            }maxR(++row);
+	            
+	
+	        }
+	    } catch (FileNotFoundException e) {
+	        e.printStackTrace();
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
+	}
+	
+	
+	public ExcelConn(String alamat, String sheet){
+		setRC(alamat,sheet); System.out.println(maxrow +","+ maxcol);
+		int row, col;
+		try {
+	
+	        FileInputStream excelFile = new FileInputStream(new File(alamat));
+	        Workbook workbook = new XSSFWorkbook(excelFile);
+	        Sheet datatypeSheet = workbook.getSheet(sheet);
+	        Iterator<Row> iterator = datatypeSheet.iterator();
+	        
+	        data = new Object[maxrow+1][maxcol+1];
+	        
+	        row = 0;
+	        while (iterator.hasNext()) {
+	        	
+	            Row currentRow = iterator.next();
+	            currentRow.getLastCellNum();
+	            Iterator<Cell> cellIterator = currentRow.iterator();
+	            col = 0;
+	            while (cellIterator.hasNext()) {
+	            	
+	                Cell currentCell = cellIterator.next(); 
+	                
+	                System.out.println(row+","+col);  col++;
+	                if (currentCell.getCellTypeEnum() == CellType.STRING) {
+	                	data[row][col] = currentCell.getStringCellValue();
+	                } else if (currentCell.getCellTypeEnum() == CellType.NUMERIC) {
+	                	data[row][col] = currentCell.getNumericCellValue();
+	                }
+	
+	            }row++;
+	            //System.out.println();
+	
+	        }
+	    } catch (FileNotFoundException e) {
+	        e.printStackTrace();
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
 	}
 }
