@@ -18,6 +18,8 @@ import javax.swing.JTextField;
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -171,8 +173,41 @@ public class SetData extends JFrame {
 		
 		table = new JTable();
 		table.setColumnSelectionAllowed(true);
-		table.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		scrollPane.setViewportView(table);
+		
+		table.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				System.out.println(table.getSelectedRow()+","+table.getSelectedColumn());
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		
 		JPanel panel_3 = new JPanel();
 		panel_3.setBorder(new TitledBorder(null, "Sheet", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -189,9 +224,9 @@ public class SetData extends JFrame {
 				DefaultTableCellRenderer center = new DefaultTableCellRenderer();
 				center.setHorizontalAlignment(SwingConstants.CENTER);
 				for(int i=0;i<table.getColumnCount();i++){
-					table.setValueAt(table.getValueAt(0, i).toString().toUpperCase(), 0, i);	
+					table.setValueAt(table.getValueAt(0, i).toString().toUpperCase(), 0, i);
 				}
-				
+				table.getColumnModel().getColumn(0).setCellRenderer(center);
 			}
 		});
 		GroupLayout gl_panel_1 = new GroupLayout(panel_1);
