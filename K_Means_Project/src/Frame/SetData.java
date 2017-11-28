@@ -180,13 +180,14 @@ public class SetData extends JFrame {
 			
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
-				System.out.println(table.getSelectedRow()+","+table.getSelectedColumn());
+				String[][] data2 = main.getSelectedData(table);
+				
 				
 			}
 			
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-				// TODO Auto-generated method stub
+				//System.out.println(table.getSelectedRow()+","+table.getSelectedColumn());
 				
 			}
 			
