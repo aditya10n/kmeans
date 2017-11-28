@@ -1,6 +1,7 @@
 package Controller;
 
 import javax.swing.JFileChooser;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import Class.ExcelConn;
@@ -77,6 +78,21 @@ public class SetData {
 		}
 		dm.setDataVector(data, head);
 		return dm;
+	}
+	
+	public String[][] getSelectedData(JTable table) {
+		int[] selectedRow = table.getSelectedRows();
+	    int[] selectedCol = table.getSelectedColumns();
+	    String[][] hasil=null;
+	    hasil= new String[selectedRow.length][selectedCol.length];
+	    
+	    for(int i=0; i<selectedRow.length;i++){
+	    	for(int y=0; y<selectedCol.length;y++){
+	    		hasil[i][y]= table.getValueAt(selectedRow[i],selectedCol[y]).toString();
+	    		System.out.println(hasil[i][y]);
+	    	}
+	    	
+	    }return hasil;
 	}
 	
 }
