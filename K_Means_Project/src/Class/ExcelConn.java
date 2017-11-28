@@ -24,7 +24,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 public class ExcelConn {
 	
 	public String[] sheet;
-	public Object[][] data;
+	public String[][] data;
 	public int maxrow, maxcol;
 	
 	
@@ -45,13 +45,13 @@ public class ExcelConn {
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			//e.printStackTrace();
-			JOptionPane.showMessageDialog(null, "Tidak dapat membuka file ERR01");
+			JOptionPane.showMessageDialog(null, "Tidak dapat membuka file ERR0R(01)");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			//e.printStackTrace();
-			JOptionPane.showMessageDialog(null, "Tidak dapat membuka file ERR02");
+			JOptionPane.showMessageDialog(null, "Tidak dapat membuka file ERR0R(02)");
 		} catch (Exception e){
-			JOptionPane.showMessageDialog(null, "Tidak dapat membuka file ERR02");
+			JOptionPane.showMessageDialog(null, "Tidak dapat membuka file");
 			e.printStackTrace();
 		}
          
@@ -90,10 +90,12 @@ public class ExcelConn {
 	               
 	                if (currentCell.getCellTypeEnum() == CellType.STRING) {
 	                	//System.out.println(row +","+ col);
+	                	maxC(col++);
 	                } else if (currentCell.getCellTypeEnum() == CellType.NUMERIC) {
 	                	//System.out.println(row +","+ col);
+	                	maxC(col++);
 	                }
-	                maxC(++col);
+	                
 	            }maxR(++row);
 	            
 	
@@ -116,7 +118,7 @@ public class ExcelConn {
 	        Sheet datatypeSheet = workbook.getSheet(sheet);
 	        Iterator<Row> iterator = datatypeSheet.iterator();
 	        
-	        data = new Object[maxrow+1][maxcol+1];
+	        data = new String[maxrow+1][maxcol+1];
 	        
 	        row = 0;
 	        while (iterator.hasNext()) {
@@ -129,11 +131,11 @@ public class ExcelConn {
 	            	
 	                Cell currentCell = cellIterator.next(); 
 	                
-	                System.out.println(row+","+col);  col++;
+	                System.out.println(row+","+col); 
 	                if (currentCell.getCellTypeEnum() == CellType.STRING) {
-	                	data[row][col] = currentCell.getStringCellValue();
+	                	data[row][col++] = currentCell.getStringCellValue();
 	                } else if (currentCell.getCellTypeEnum() == CellType.NUMERIC) {
-	                	data[row][col] = currentCell.getNumericCellValue();
+	                	data[row][col++] = Double.toString(currentCell.getNumericCellValue());
 	                }
 	
 	            }row++;

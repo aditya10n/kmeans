@@ -9,7 +9,13 @@ public class SetData {
 	private String alamat;
 	private Frame.SetData main;
 	private ExcelConn excel;
-	private Object[][] data;
+	private String[][] data;
+	private String[] sheet;
+	private int maxrow,maxcol;
+	
+	public void setAlamat(String alamat){
+		this.alamat=alamat;
+	}
 	
 	public String openFile(){
 		JFileChooser fileChooser = new JFileChooser();
@@ -23,27 +29,27 @@ public class SetData {
 	    return alamat;
 	}
 	
-	public String[] getSheet(){
-		String[] sheet=null;
-		
+	public String[] getSheet(String alamat){
 		excel = new ExcelConn(alamat);
 		sheet = excel.sheet;
 		return sheet;
 	}
 	
-	public Object[][] getData(String sheet, String from, String to){
+	public String[][] getData(String alamat, String sheet){
 		data=null;
 		
 		excel = new ExcelConn(alamat,sheet);
-		data = excel.data;
+		this.data = excel.data;
+		
+		this.maxcol=excel.maxcol;
+		this.maxrow=excel.maxrow;
+		
 		return data;
 	}
 	
-	public void setAlamat(String alamat){
-		this.alamat=alamat;
-	}
 	
 	public DefaultTableModel table(){
+		
 		DefaultTableModel dm = new DefaultTableModel(){
 			private static final long serialVersionUID = 1L;
 			@Override
@@ -52,7 +58,25 @@ public class SetData {
 			}
 			
 		};
-		dm.setDataVector(data, null);
+		
+		for(int i=0;i<maxrow+1;i++){
+			for(int s=0;s<maxcol+1;s++){
+				if(data[i][s]!=null)
+					data[i][s]=data[i][s];
+				else
+					data[i][s]="";
+			}
+		}
+		
+		String[] head=new String[maxcol+1];
+		for(int i=0;i<maxcol+1;i++){
+			/*if(data[0][i]!=null)
+				head[i]=data[0][i];
+			else*/
+				head[i]="";
+		}
+		dm.setDataVector(data, head);
 		return dm;
 	}
+	
 }

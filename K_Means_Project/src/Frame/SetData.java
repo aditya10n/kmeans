@@ -20,6 +20,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.JComboBox;
 import javax.swing.UIManager;
 
@@ -30,6 +32,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JCheckBox;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 
 
 public class SetData extends JFrame {
@@ -93,7 +96,7 @@ public class SetData extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				if(!alamat.getText().equals("")){
 					main.setAlamat(alamat.getText());
-					sheet= main.getSheet();
+					sheet= main.getSheet(alamat.getText());
 					
 					for(int i=comboBox.getItemCount()-1;i>=0;i--){
 						comboBox.removeItemAt(i);
@@ -167,6 +170,8 @@ public class SetData extends JFrame {
 		panel_6.add(scrollPane, BorderLayout.CENTER);
 		
 		table = new JTable();
+		table.setColumnSelectionAllowed(true);
+		table.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		scrollPane.setViewportView(table);
 		
 		JPanel panel_3 = new JPanel();
@@ -178,10 +183,14 @@ public class SetData extends JFrame {
 		JButton btnSelect = new JButton("Select");
 		btnSelect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				main.getData(comboBox.getSelectedItem().toString(),
-						from.toString(), to.toString());
+				main.getData(alamat.getText(), comboBox.getSelectedItem().toString());
 				table.setModel(main.table());
-				scrollPane.setViewportView(table);
+				
+				DefaultTableCellRenderer center = new DefaultTableCellRenderer();
+				center.setHorizontalAlignment(SwingConstants.CENTER);
+				for(int i=0;i<table.getColumnCount();i++){
+					table.setValueAt(table.getValueAt(0, i).toString().toUpperCase(), 0, i);	
+				}
 				
 			}
 		});
