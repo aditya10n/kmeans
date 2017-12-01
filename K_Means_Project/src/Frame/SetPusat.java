@@ -4,7 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.EventQueue;
 
-import javafx.scene.control.TableColumn;
+
+
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -28,9 +29,12 @@ import javax.swing.JButton;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.EventObject;
 
 import javax.swing.JLabel;
+import javax.swing.ListSelectionModel;
 
 public class SetPusat extends JFrame {
 
@@ -67,7 +71,7 @@ public class SetPusat extends JFrame {
 	public SetPusat(String[] atribut, String[][] data) {
 		setAtt(atribut); setData(data);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 583, 300);
+		setBounds(100, 100, 583, 388);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -83,27 +87,28 @@ public class SetPusat extends JFrame {
 		JPanel panel_2 = new JPanel();
 		panel_2.setBorder(new TitledBorder(null, "Data", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		
-		JButton btnStart = new JButton("Start");
+		JButton btnStart = new JButton("Start Clustering");
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.TRAILING)
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addComponent(panel_2, GroupLayout.PREFERRED_SIZE, 287, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-						.addComponent(btnStart)
-						.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 141, GroupLayout.PREFERRED_SIZE)
-						.addComponent(panel, GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE)))
+					.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 141, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED, 287, Short.MAX_VALUE)
+					.addComponent(btnStart)
+					.addGap(22))
+				.addComponent(panel_2, GroupLayout.DEFAULT_SIZE, 557, Short.MAX_VALUE)
+				.addComponent(panel, GroupLayout.DEFAULT_SIZE, 557, Short.MAX_VALUE)
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addComponent(btnStart)
-					.addPreferredGap(ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
-					.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 49, GroupLayout.PREFERRED_SIZE)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
+						.addComponent(btnStart, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 49, Short.MAX_VALUE))
+					.addGap(6)
+					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE))
-				.addComponent(panel_2, GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE)
+					.addComponent(panel_2, GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE))
 		);
 		panel_2.setLayout(new BorderLayout(0, 0));
 		
@@ -111,7 +116,48 @@ public class SetPusat extends JFrame {
 		panel_2.add(scrollPane_1, BorderLayout.CENTER);
 		
 		dataTable = new JTable();
+		dataTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		scrollPane_1.setViewportView(dataTable);
+		
+		dataTable.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				//main.setInitial();
+				for(int i=1;i<=3;i++){
+					tableInitial.setValueAt(
+							dataTable.getValueAt(dataTable.getSelectedRow(), i),
+							tableInitial.getSelectedRow(), 
+							i);
+				}
+				tableInitial.setValueAt(dataTable.getValueAt(dataTable.getSelectedRow(), 1),tableInitial.getSelectedRow(), 1);				
+			}
+		});
+		
 		
 		combo = new JComboBox();
 		combo.addItem("1");
@@ -149,6 +195,7 @@ public class SetPusat extends JFrame {
 		panel.add(scrollPane);
 		
 		tableInitial = new JTable();
+		tableInitial.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		scrollPane.setViewportView(tableInitial);
 		contentPane.setLayout(gl_contentPane);
 		
