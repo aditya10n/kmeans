@@ -18,16 +18,28 @@ import javax.swing.JTextField;
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.event.ContainerEvent;
+import java.awt.event.ContainerListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.border.TitledBorder;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.JComboBox;
 import javax.swing.UIManager;
 
 import java.awt.Color;
+import java.beans.PropertyVetoException;
+import java.beans.VetoableChangeListener;
 
 import javax.swing.JSpinner;
 import javax.swing.DefaultComboBoxModel;
@@ -47,7 +59,8 @@ public class SetData extends JFrame {
 	private JComboBox comboBox;
 	String[] sheet;
 	private JTable table;
-	final JScrollPane scrollPane;
+	JScrollPane scrollPane;
+	JCheckBox withoutAtt;
 
 	/**
 	 * Launch the application.
@@ -162,8 +175,8 @@ public class SetData extends JFrame {
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addComponent(panel, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE)
-						.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(panel_6, GroupLayout.DEFAULT_SIZE, 322, Short.MAX_VALUE))
+						.addComponent(panel_6, GroupLayout.DEFAULT_SIZE, 311, Short.MAX_VALUE)
+						.addComponent(panel_1, GroupLayout.DEFAULT_SIZE, 311, Short.MAX_VALUE))
 					.addContainerGap())
 		);
 		panel_6.setLayout(new BorderLayout(0, 0));
@@ -176,39 +189,7 @@ public class SetData extends JFrame {
 		table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		scrollPane.setViewportView(table);
 		
-		table.addMouseListener(new MouseListener() {
-			
-			@Override
-			public void mouseReleased(MouseEvent arg0) {
-				String[][] data2 = main.getSelectedData(table);
-				
-				
-			}
-			
-			@Override
-			public void mousePressed(MouseEvent arg0) {
-				//System.out.println(table.getSelectedRow()+","+table.getSelectedColumn());
-				
-			}
-			
-			@Override
-			public void mouseExited(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mouseEntered(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
+		
 		
 		JPanel panel_3 = new JPanel();
 		panel_3.setBorder(new TitledBorder(null, "Sheet", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -230,49 +211,72 @@ public class SetData extends JFrame {
 				table.getColumnModel().getColumn(0).setCellRenderer(center);
 			}
 		});
+		
+		JButton btnProcess = new JButton("Process");
+		btnProcess.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String[][] data = main.getSelectedData(table);
+				SetPusat sp = new SetPusat(main.getAtt(withoutAtt, data), main.getData(withoutAtt, data,table));
+				sp.setVisible(true);
+				dispose();
+				
+			}
+		});
 		GroupLayout gl_panel_1 = new GroupLayout(panel_1);
 		gl_panel_1.setHorizontalGroup(
 			gl_panel_1.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_1.createSequentialGroup()
-					.addContainerGap()
+					.addGap(34)
+					.addComponent(btnProcess, GroupLayout.DEFAULT_SIZE, 83, Short.MAX_VALUE)
+					.addGap(44))
+				.addGroup(Alignment.TRAILING, gl_panel_1.createSequentialGroup()
 					.addGroup(gl_panel_1.createParallelGroup(Alignment.TRAILING)
-						.addComponent(panel_4, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)
-						.addComponent(panel_3, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-					.addGap(363))
-				.addGroup(gl_panel_1.createSequentialGroup()
-					.addGap(42)
-					.addComponent(btnSelect)
-					.addContainerGap(44, Short.MAX_VALUE))
+						.addGroup(Alignment.LEADING, gl_panel_1.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(panel_3, GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE))
+						.addGroup(Alignment.LEADING, gl_panel_1.createSequentialGroup()
+							.addGap(39)
+							.addComponent(btnSelect, GroupLayout.DEFAULT_SIZE, 75, Short.MAX_VALUE)
+							.addGap(31))
+						.addGroup(Alignment.LEADING, gl_panel_1.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(panel_4, GroupLayout.PREFERRED_SIZE, 127, Short.MAX_VALUE)
+							.addPreferredGap(ComponentPlacement.RELATED)))
+					.addGap(16))
 		);
 		gl_panel_1.setVerticalGroup(
-			gl_panel_1.createParallelGroup(Alignment.TRAILING)
-				.addGroup(Alignment.LEADING, gl_panel_1.createSequentialGroup()
+			gl_panel_1.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_1.createSequentialGroup()
 					.addComponent(panel_3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(panel_4, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 					.addComponent(btnSelect, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap())
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(panel_4, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(btnProcess)
+					.addContainerGap(78, Short.MAX_VALUE))
 		);
 		
 		JLabel lblFrom = new JLabel("From");
 		
 		from = new JTextField();
+		from.setEnabled(false);
 		from.setColumns(10);
 		
 		JLabel lblTo = new JLabel("to");
 		
 		to = new JTextField();
+		to.setEnabled(false);
 		to.setColumns(10);
 		
-		JCheckBox withAtt = new JCheckBox("with atribute");
+		withoutAtt = new JCheckBox("without attribute");
 		GroupLayout gl_panel_4 = new GroupLayout(panel_4);
 		gl_panel_4.setHorizontalGroup(
 			gl_panel_4.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_4.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_panel_4.createParallelGroup(Alignment.LEADING)
-						.addComponent(withAtt)
+						.addComponent(withoutAtt)
 						.addGroup(gl_panel_4.createSequentialGroup()
 							.addGroup(gl_panel_4.createParallelGroup(Alignment.LEADING)
 								.addComponent(lblFrom)
@@ -294,16 +298,71 @@ public class SetData extends JFrame {
 						.addComponent(lblTo)
 						.addComponent(to, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(withAtt, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE)
+					.addComponent(withoutAtt, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap(13, Short.MAX_VALUE))
 		);
 		panel_4.setLayout(gl_panel_4);
 		panel_3.setLayout(new BorderLayout(0, 0));
+		table.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				from.setText(main.fromCell(table));
+				to.setText(main.toCell(table));
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		table.addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+				from.setText(main.fromCell(table));
+				to.setText(main.toCell(table));
+				
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		
 		comboBox = new JComboBox();
 		panel_3.add(comboBox);
 		panel_1.setLayout(gl_panel_1);
 		contentPane.setLayout(gl_contentPane);
+		
 	}
 	
 	public void setAlamat(String alamat){

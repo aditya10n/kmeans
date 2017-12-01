@@ -1,5 +1,8 @@
 package Controller;
 
+import java.awt.Checkbox;
+
+import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -13,6 +16,7 @@ public class SetData {
 	private String[][] data;
 	private String[] sheet;
 	private int maxrow,maxcol;
+	
 	
 	public void setAlamat(String alamat){
 		this.alamat=alamat;
@@ -89,10 +93,62 @@ public class SetData {
 	    for(int i=0; i<selectedRow.length;i++){
 	    	for(int y=0; y<selectedCol.length;y++){
 	    		hasil[i][y]= table.getValueAt(selectedRow[i],selectedCol[y]).toString();
-	    		System.out.println(hasil[i][y]);
+	    		
 	    	}
 	    	
 	    }return hasil;
+	}
+	
+	public String fromCell(JTable table){
+		int[] selectedRow = table.getSelectedRows();
+	    int[] selectedCol = table.getSelectedColumns();
+		return selectedCol[0]+","+selectedRow[0];
+	}
+	
+	public String toCell(JTable table){
+		int[] selectedRow = table.getSelectedRows();
+	    int[] selectedCol = table.getSelectedColumns();
+		return selectedCol[selectedCol.length-1]+","+selectedRow[selectedRow.length-1];
+	}
+	
+	public String[] getAtt(JCheckBox withoutAtt, String[][] data){
+		String[] att=new String[data[0].length];
+		for(int i=0; i<data[0].length;i++){
+			if(withoutAtt.isSelected()){
+				att[i]="X" + Integer.toString(i+1);
+			}else{
+				att[i]=data[0][i];
+			}
+		}
+		return att;
+	}
+	
+	public String[][] getData(JCheckBox withoutAtt,String[][] data, JTable table){
+		int[] selectedRow = table.getSelectedRows();
+	    int[] selectedCol = table.getSelectedColumns();
+	    String[][] hasil;
+		if(withoutAtt.isSelected()){
+			hasil=new String[selectedCol.length+1][selectedRow.length];
+			for(int i=0; i<selectedCol.length+1;i++){
+				for(int x=0; x<selectedRow.length;x++){
+					if(x==0){
+						hasil[i][x] = "Y" + Integer.toString(x+1);
+					}else{
+						hasil[i][x+1]= data[i][x];
+					}
+				}
+			}
+		}else{
+			hasil=new String[selectedRow.length-1][selectedCol.length];
+			for(int i=1; i<selectedRow.length;i++){
+				for(int x=0; x<selectedCol.length;x++){
+					hasil[i-1][x]=data[i][x];
+				}
+			}
+		}
+		
+		
+		return hasil;
 	}
 	
 }
