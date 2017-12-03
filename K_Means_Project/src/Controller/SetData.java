@@ -1,6 +1,7 @@
 package Controller;
 
 import java.awt.Checkbox;
+import java.lang.instrument.ClassDefinition;
 
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
@@ -80,6 +81,8 @@ public class SetData {
 			else*/
 				head[i]="";
 		}
+		
+		
 		dm.setDataVector(data, head);
 		return dm;
 	}
