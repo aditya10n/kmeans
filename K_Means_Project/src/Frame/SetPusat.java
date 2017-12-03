@@ -7,6 +7,7 @@ import java.awt.EventQueue;
 
 
 
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -88,6 +89,18 @@ public class SetPusat extends JFrame {
 		panel_2.setBorder(new TitledBorder(null, "Data", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		
 		JButton btnStart = new JButton("Start Clustering");
+		btnStart.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String[][] dc = new String[tableInitial.getRowCount()][tableInitial.getColumnCount()];
+				for(int i=0;i<tableInitial.getRowCount();i++){
+					for(int x=0;x<tableInitial.getColumnCount();x++){
+						dc[i][x] = (String) tableInitial.getValueAt(i, x);
+					}
+				}
+				Iterasi it = new Iterasi(getAtt(), getData(), dc);
+				it.setVisible(true);
+			}
+		});
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
