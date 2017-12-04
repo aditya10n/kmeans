@@ -20,7 +20,7 @@ public class Iterasi extends JFrame {
 	private JPanel contentPane;
 	private JTable tableC;
 	private JTable tableIt;
-	Controller.Iterasi main = new Controller.Iterasi();
+	Controller.Iterasi2 main = new Controller.Iterasi2();
 
 	/**
 	 * Launch the application.
